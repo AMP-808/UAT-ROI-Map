@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UAT Map</title>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <script>
+  (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+    key: "AIzaSyBuFuxp6B-bvpyaLhih_I4AUwTDYSmkzLg",
+    v: "weekly",
+
+  });
+
+  let map;
+
+  async function initMap() {
+
+    const allROI = [
+      {
+        address: "604 Laurel St, Atlantic, IA 50022",
+        mapKeyNumber: 1,
+        latitude: 41.4046259,
+        longitude: -95.0209046
+      },
+      {
+        address: "404 Laurel St, Atlantic, IA 50022",
+        mapKeyNumber: 2,
+        latitude: 41.4066348,
+        longitude: -95.0208463
+      },
+      {
+        address: "207 W 6th St, Atlantic, IA 50022",
+        mapKeyNumber: 3,
+        latitude: 41.4047845,
+        longitude: -95.0165801
+      },
+      {
+        address: "606 Hickory St., Atlantic, IA 50022",
+        mapKeyNumber: 4,
+        latitude: 41.4044788,
+        longitude: -95.01956659999999
+      },
+      {
+        address: "404 Birch St., Atlantic, Iowa 50022",
+        mapKeyNumber: 5,
+        latitude: 41.4066076,
+        longitude: -95.018185
+      },
+      {
+        address: "304 E 6th St, Atlantic, Iowa 50022",
+        mapKeyNumber: 6,
+        latitude: 41.4051637,
+        longitude: -95.0083123
+      },
+      {
+        address: "600 E 7th, Atlantic, Iowa 50022",
+        mapKeyNumber: 7,
+        latitude: 41.4041287,
+        longitude: -95.0044409
+      },
+      {
+        address: "909 W Mahogany Rd, Atlantic, Iowa 50022",
+        mapKeyNumber: 8,
+        latitude: 41.4016025,
+        longitude: -95.0268285
+      },
+      {
+        address: "903 W Mahogany Rd, Atlantic, Iowa 50022",
+        mapKeyNumber: 9,
+        latitude: 41.401975,
+        longitude: -95.0263495
+      },
+      {
+        address: "810 E Mahogany Rd, Atlantic, Iowa 50022",
+        mapKeyNumber: 10,
+        latitude: 41.4022581,
+        longitude: -95.0245202
+      },
+      {
+        address: "703 Birch St, Atlantic, Iowa 50022",
+        mapKeyNumber: 11,
+        latitude: 41.40374449999999,
+        longitude: -95.0187354
+      },
+      {
+        address: "711 Birch St, Atlantic, Iowa 50022",
+        mapKeyNumber: 12,
+        latitude: 41.4031961,
+        longitude: -95.0187389
+      },
+      {
+        address: "206 W 11th St, Atlantic, Iowa, 50022",
+        mapKeyNumber: 13,
+        latitude: 41.400175,
+        longitude: -95.01666139999999
+      },
+      {
+        address: "1204 Cedar St, Atlantic, Iowa 50022",
+        mapKeyNumber: 14,
+        latitude: 41.3987481,
+        longitude: -95.0169343
+      },
+      {
+        address: "1106 Birch St, Atlantic, Iowa 50022",
+        mapKeyNumber: 15,
+        latitude: 41.3995018,
+        longitude: -95.0182257
+      },
+      {
+        address: "301 Davenport St, Lewis, IA 51544",
+        mapKeyNumber: 16,
+        latitude: 41.3052585,
+        longitude: -95.090772
+      },
+      {
+        address: "401 California St, Lewis, Iowa 51544",
+        mapKeyNumber: 17,
+        latitude: 41.3049732,
+        longitude: -95.08866139999999
+      },
+      {
+        address: "108 Pioneer Ave, Wiota, Iowa 50274",
+        mapKeyNumber: 18,
+        latitude: 41.4034518,
+        longitude: -94.8839485
+      },
+      {
+        address: "176 Washington St, Lewis, Iowa 51544",
+        mapKeyNumber: 19,
+        latitude: 41.3035755,
+        longitude: -95.0866937
+      },
+      {
+        address: "311 California St, Lewis, Iowa 51544",
+        mapKeyNumber: 20,
+        latitude: 41.3051123,
+        longitude: -95.08822599999999
+      },
+      {
+        address: "502 Oregon St, Lewis,Iowa 51544",
+        mapKeyNumber: 21,
+        latitude: 41.30357739999999,
+        longitude: -95.09010289999999
+      },
+      {
+        address: "510 Minnesota St, Lewis, Iowa 51544",
+        mapKeyNumber: 22,
+        latitude: 41.3077304,
+        longitude: -95.0908991
+      },
+      {
+        address: "203 Eighth St, Griswold, Iowa 51535",
+        mapKeyNumber: 23,
+        latitude: 41.2303653,
+        longitude: -95.14636290000001
+      },
+      {
+        address: "205 Eighth St, Griswold, Iowa 51535",
+        mapKeyNumber: 24,
+        latitude: 41.2303744,
+        longitude: -95.1460656
+      },
+      {
+        address: "407 Eighth St, Griswold, Iowa 51535",
+        mapKeyNumber: 25,
+        latitude: 41.2303606,
+        longitude: -95.1432878
+      },
+      {
+        address: "501 North St Apt#3, Griswold, Iowa 51535",
+        mapKeyNumber: 26,
+        latitude: 41.2387859,
+        longitude: -95.14188340000001
+      },
+      {
+        address: "601 North St, Griswold, Iowa 51535",
+        mapKeyNumber: 27,
+        latitude: 41.2388572,
+        longitude: -95.14090879999999
+      },
+      {
+        address: "611 North St, Griswold, Iowa 51535",
+        mapKeyNumber: 28,
+        latitude: 41.238816,
+        longitude: -95.1399436
+      },
+      {
+        address: "700 North St, Griswold, Iowa 51535",
+        mapKeyNumber: 29,
+        latitude: 41.2383853,
+        longitude: -95.1398922
+      },
+      {
+        address: "712 North St, Griswold, Iowa 51535",
+        mapKeyNumber: 30,
+        latitude: 41.2384314,
+        longitude: -95.1388983
+      },
+      {
+        address: "811 Cass St, Griswold, Iowa 51535",
+        mapKeyNumber: 31,
+        latitude: 41.23040779999999,
+        longitude: -95.1430469
+      },
+      {
+        address: "1315 Birch St, Atlantic, Iowa 50022",
+        mapKeyNumber: 32,
+        latitude: 41.3968374,
+        longitude: -95.01884340000001
+      },
+      {
+        address: "810 Birch St, Atlantic, Iowa 50022",
+        mapKeyNumber: 33,
+        latitude: 41.4022455,
+        longitude: -95.0182356
+      },
+      {
+        address: "606 Birch St, Atlantic, Iowa 50022",
+        mapKeyNumber: 34,
+        latitude: 41.4044574,
+        longitude: -95.0182663
+      },
+      {
+        address: "502 Birch St, Atlantic, Iowa 50022",
+        mapKeyNumber: 35,
+        latitude: 41.4057099,
+        longitude: -95.018185
+      },
+      {
+        address: "410 Birch St, Atlantic, Iowa 50022",
+        mapKeyNumber: 36,
+        latitude: 41.4064401,
+        longitude: -95.01819760000001
+      },
+      {
+        address: "310 Birch St, Atlantic, Iowa 50022",
+        mapKeyNumber: 37,
+        latitude: 41.4071949,
+        longitude: -95.0181444
+      },
+      {
+        address: "1211 Cedar St, Atlantic, Iowa 50022",
+        mapKeyNumber: 38,
+        latitude: 41.3983373,
+        longitude: -95.01745559999999
+      },
+      {
+        address: "504 Cedar St, Atlantic, Iowa 50022",
+        mapKeyNumber: 39,
+        latitude: 41.405586,
+        longitude: -95.0168862
+      },
+      {
+        address: "303 Cedar St, Atlantic, Iowa 50022",
+        mapKeyNumber: 40,
+        latitude: 41.40774460000001,
+        longitude: -95.0173628
+      },
+      {
+        address: "202 Cedar St, Atlantic, Iowa 50022",
+        mapKeyNumber: 41,
+        latitude: 41.4087354,
+        longitude: -95.0167436
+      },
+      {
+        address: "105 Cedar St, Atlantic, Iowa 50022",
+        mapKeyNumber: 42,
+        latitude: 41.4096128,
+        longitude: -95.0172911
+      },
+      {
+        address: "11 Cedar St, Atlantic, Iowa 50022",
+        mapKeyNumber: 43,
+        latitude: 41.4102245,
+        longitude: -95.01729379999999
+      },
+      {
+        address: "308 E 4th St, Atlantic, Iowa 50022",
+        mapKeyNumber: 44,
+        latitude: 41.4071657,
+        longitude: -95.00784879999999
+      },
+      {
+        address: "502 E 4th St, Atlantic, Iowa 50022",
+        mapKeyNumber: 45,
+        latitude: 41.4071125,
+        longitude: -95.0054933
+      },
+      {
+        address: "300 E 5th St, Atlantic, Iowa 50022",
+        mapKeyNumber: 46,
+        latitude: 41.4061351,
+        longitude: -95.0085392
+      },
+      {
+        address: "601 E 6th St, Atlantic, Iowa 50022",
+        mapKeyNumber: 47,
+        latitude: 41.4046308,
+        longitude: -95.0044734
+      },
+      {
+        address: "511 Elm St, Atlantic, Iowa 50022",
+        mapKeyNumber: 48,
+        latitude: 41.4051396,
+        longitude: -95.01052140000002
+      },
+      {
+        address: "510 Elm St, Atlantic, Iowa 50022",
+        mapKeyNumber: 49,
+        latitude: 41.405149,
+        longitude: -95.00999829999999
+      },
+      {
+        address: "423 Elm St, Atlantic, Iowa",
+        mapKeyNumber: 50,
+        latitude: 41.4061471,
+        longitude: -95.0105395
+      },
+      {
+        address: "304 Elm St, Atlantic, Iowa 50022",
+        mapKeyNumber: 51,
+        latitude: 41.4077152,
+        longitude: -95.0099674
+      },
+      {
+        address: "806 E Mahogany Rd, Atlantic, Iowa 50022",
+        mapKeyNumber: 52,
+        latitude: 41.4025375,
+        longitude: -95.024509
+      },
+      {
+        address: "510 Hazel St, Atlantic, Iowa 50022",
+        mapKeyNumber: 53,
+        latitude: 41.4050848,
+        longitude: -95.0044265
+      },
+      {
+        address: "406 Hazel St, Atlantic, Iowa 50022",
+        mapKeyNumber: 54,
+        latitude: 41.4063498,
+        longitude: -95.00437180000002
+      },
+      {
+        address: "405 Hazel St #2, Atlantic, Iowa 50022",
+        mapKeyNumber: 55,
+        latitude: 41.4065154,
+        longitude: -95.0049296
+      },
+      {
+        address: "709 Hickory St, Atlantic, Iowa 50022",
+        mapKeyNumber: 56,
+        latitude: 41.403346,
+        longitude: -95.02012450000001
+      },
+      {
+        address: "511 Hickory St, Atlantic, Iowa 50022",
+        mapKeyNumber: 57,
+        latitude: 41.4051991,
+        longitude: -95.02005419999999
+      },
+      {
+        address: "502 Hickory St, Atlantic, Iowa 50022",
+        mapKeyNumber: 58,
+        latitude: 41.4057865,
+        longitude: -95.0196447
+      },
+      {
+        address: "59162 Indian Creek St, Atlantic, Iowa 50022",
+        mapKeyNumber: 59,
+        latitude: 41.3731421,
+        longitude: -95.1414355
+      },
+      {
+        address: "505 Laurel St, Atlantic, Iowa 50022",
+        mapKeyNumber: 60,
+        latitude: 41.4056281,
+        longitude: -95.0213572
+      },
+      {
+        address: "500 Laurel St, Atlantic, Iowa 50022",
+        mapKeyNumber: 61,
+        latitude: 41.40587379999999,
+        longitude: -95.02087360000002
+      },
+      {
+        address: "405 Linn St, Atlantic, Iowa 50022",
+        mapKeyNumber: 62,
+        latitude: 41.4065413,
+        longitude: -95.0077354
+      },
+      {
+        address: "1003 Locust St, Atlantic, Iowa 50022",
+        mapKeyNumber: 63,
+        latitude: 41.4007213,
+        longitude: -95.01617569999999
+      },
+      {
+        address: "703 Locust St, Atlantic, Iowa 50022",
+        mapKeyNumber: 64,
+        latitude: 41.4037338,
+        longitude: -95.0160848
+      },
+      {
+        address: "612 Locust St, Atlantic, Iowa 50022",
+        mapKeyNumber: 65,
+        latitude: 41.4043417,
+        longitude: -95.01554399999999
+      },
+      {
+        address: "503 Locust St, Atlantic, Iowa 50022",
+        mapKeyNumber: 66,
+        latitude: 41.4057459,
+        longitude: -95.01608379999999
+      },
+      {
+        address: "314 Locust St, Atlantic, Iowa 50022",
+        mapKeyNumber: 67,
+        latitude: 41.407376,
+        longitude: -95.0154795
+      },
+      {
+        address: "311 Locust St, Atlantic, Iowa 50022",
+        mapKeyNumber: 68,
+        latitude: 41.4071851,
+        longitude: -95.0159965
+      },
+      {
+        address: "107 Locust St, Atlantic, Iowa 50022",
+        mapKeyNumber: 69,
+        latitude: 41.4094622,
+        longitude: -95.0160079
+      },
+      {
+        address: "600 Maple St, Atlantic, Iowa 50022",
+        mapKeyNumber: 70,
+        latitude: 41.4048009,
+        longitude: -95.0085697
+      },
+      {
+        address: "705 North St, Atlantic, Iowa 50022",
+        mapKeyNumber: 71,
+        latitude: 41.4036007,
+        longitude: -95.0138776
+      },
+      {
+        address: "503 Oak St, Atlantic, Iowa 50022",
+        mapKeyNumber: 72,
+        latitude: 41.4056388,
+        longitude: -95.00636229999999
+      },
+      {
+        address: "405 Oak St, Atlantic, Iowa 50022",
+        mapKeyNumber: 73,
+        latitude: 41.4065501,
+        longitude: -95.0063873
+      },
+      {
+        address: "501 Olive St, Atlantic Iowa 50022",
+        mapKeyNumber: 74,
+        latitude: 41.405625,
+        longitude: -95.0036452
+      },
+      {
+        address: "806 Palm St, Atlantic, Iowa 50022",
+        mapKeyNumber: 75,
+        latitude: 41.402485,
+        longitude: -95.0221775
+      },
+      {
+        address: "908 Poplar St, Atlantic, Iowa 50022",
+        mapKeyNumber: 76,
+        latitude: 41.4013129,
+        longitude: -95.0142845
+      },
+      {
+        address: "608 W 10th St, Atlantic, Iowa 50022",
+        mapKeyNumber: 77,
+        latitude: 41.4012603,
+        longitude: -95.02193899999999
+      },
+      {
+        address: "707 W 6th St, Atlantic, Iowa 50022",
+        mapKeyNumber: 78,
+        latitude: 41.4048917,
+        longitude: -95.02325119999999
+      },
+      {
+        address: "611 Unit 5 W 6th St, Atlantic, Iowa 50022",
+        mapKeyNumber: 79,
+        latitude: 41.4049954,
+        longitude: -95.0130988
+      },
+      {
+        address: "604 W 6th St, Atlantic, Iowa 50022",
+        mapKeyNumber: 80,
+        latitude: 41.4053028,
+        longitude: -95.0216741
+      },
+      {
+        address: "401 W 6th St, Atlantic, Iowa 50022",
+        mapKeyNumber: 81,
+        latitude: 41.4048203,
+        longitude: -95.01872879999999
+      },
+      {
+        address: "310 W 5th St, Atlantic, Iowa 50022",
+        mapKeyNumber: 82,
+        latitude: 41.4061969,
+        longitude: -95.0182054
+      },
+      {
+        address: "210 W 2nd St, Atlantic, Iowa 50022",
+        mapKeyNumber: 83,
+        latitude: 41.4092134,
+        longitude: -95.0168475
+      },
+      {
+        address: "907 W Mahogany Dr, Atlantic, Iowa 50022",
+        mapKeyNumber: 84,
+        latitude: 41.40170250000001,
+        longitude: -95.0266585
+      },
+      {
+        address: "905 W Mahogany Dr, Atlantic, Iowa 50022",
+        mapKeyNumber: 85,
+        latitude: 41.4018779,
+        longitude: -95.02655039999999
+      },
+      {
+        address: "901 W Mahogany Dr, Atlantic, Iowa 50022",
+        mapKeyNumber: 86,
+        latitude: 41.4020875,
+        longitude: -95.0262865
+      },
+      {
+        address: "804 W Mahogany Dr, Atlantic, Iowa 50022",
+        mapKeyNumber: 87,
+        latitude: 41.40240319999999,
+        longitude: -95.0252803
+      },
+      {
+        address: "52788 Olive St, Atlantic, Iowa 50022",
+        mapKeyNumber: 88,
+        latitude: 41.4645832,
+        longitude: -95.0027221
+      },
+      {
+        address: "53555 Olive St, Atlantic, Iowa 50022",
+        mapKeyNumber: 89,
+        latitude: 41.4534983,
+        longitude: -95.0041887
+      },
+      {
+        address: "53817 Olive St, Atlantic, Iowa 50022",
+        mapKeyNumber: 90,
+        latitude: 41.4497838,
+        longitude: -95.0041687
+      },
+      {
+        address: "522 Great River Rd, Atlantic, Iowa 50022",
+        mapKeyNumber: 91,
+        latitude: 41.4177708,
+        longitude: -95.0033022
+      },
+      {
+        address: "62222 Dunbar St, Atlantic, Iowa 50022",
+        mapKeyNumber: 92,
+        latitude: 41.4545299,
+        longitude: -94.9994675
+      },
+      {
+        address: "62746 Boston Rd, Atlantic, Iowa 50022",
+        mapKeyNumber: 93,
+        latitude: 41.4902278,
+        longitude: -94.9894042
+      },
+      {
+        address: "63071 Troublesome Creek Rd, Atlantic, Iowa 50022",
+        mapKeyNumber: 94,
+        latitude: 41.427645,
+        longitude: -94.98217419999999
+      },
+      {
+        address: "63231 Great River Rd, Atlantic, Iowa 50022",
+        mapKeyNumber: 95,
+        latitude: 41.42767320000001,
+        longitude: -94.9787856
+      },
+      {
+        address: "55505 750th St, Anita, Iowa 50020",
+        mapKeyNumber: 96,
+        latitude: 41.4253331,
+        longitude: -94.7585211
+      },
+      {
+        address: "61031 570th St, Atlantic, Iowa 51544",
+        mapKeyNumber: 97,
+        latitude: 41.3456885,
+        longitude: -95.09926709999999
+      },
+      {
+        address: "57251 570th St, Atlantic, Iowa 51544",
+        mapKeyNumber: 98,
+        latitude: 41.4004285,
+        longitude: -95.0993455
+      },
+      {
+        address: "59817 Indian Creek St, Lewis, Iowa 51544",
+        mapKeyNumber: 99,
+        latitude: 41.3636358,
+        longitude: -95.1423398
+      },
+      {
+        address: "58273 Indian Creek St, Lewis, Iowa 51544",
+        mapKeyNumber: 100,
+        latitude: 41.385642,
+        longitude: -95.1473414
+      },  {
+        address: "57644 Indian Creek St, Lewis, Iowa 51544",
+        mapKeyNumber: 101,
+        latitude: 41.3888032,
+        longitude: -95.1466336
+      },
+      {
+        address: "57202 Indian Creek St, Lewis, Iowa 51544",
+        mapKeyNumber: 102,
+        latitude: 41.40078279999999,
+        longitude: -95.146074
+      },
+      {
+        address: "60733 690th St, Wiota, Iowa 50274",
+        mapKeyNumber: 103,
+        latitude: 41.350131,
+        longitude: -94.8758129
+      },
+      {
+        address: "56233 725th St, Wiota, Iowa 50274",
+        mapKeyNumber: 104,
+        latitude: 41.4141541,
+        longitude: -94.8064689
+      },
+      {
+        address: "56757 740th St, Anita, Iowa 50020",
+        mapKeyNumber: 105,
+        latitude: 41.40729229999999,
+        longitude: -94.7776272
+      },
+      {
+        address: "57868 Lansing Rd, Atlantic, IA 50022",
+        mapKeyNumber: 106,
+        latitude: 41.346918,
+        longitude: -95.0830003
+      },
+      {
+        address: "58757 Independence Rd, Atlantic, Iowa 50022",
+        mapKeyNumber: 107,
+        latitude: 41.3897378,
+        longitude: -95.06450249999999
+      },
+      {
+        address: "72282 Independence Rd, Atlantic, Iowa 50022",
+        mapKeyNumber: 108,
+        latitude: 41.3896333,
+        longitude: -95.068703
+      },
+      {
+        address: "74788 Keystone Rd, Anita, Iowa 50020",
+        mapKeyNumber: 109,
+        latitude: 41.3605521,
+        longitude: -94.761673
+      },
+      {
+        address: "75242 Memphis St, Anita, Iowa 50020",
+        mapKeyNumber: 110,
+        latitude: 41.3313651,
+        longitude: -94.7532548
+      },
+      {
+        address: "76444 Memphis St, Anita, Iowa 50020",
+        mapKeyNumber: 111,
+        latitude: 41.3310971,
+        longitude: -94.7385168
+      },
+      {
+        address: "61231 740th St, Anita, Iowa 50020",
+        mapKeyNumber: 112,
+        latitude: 41.3421736,
+        longitude: -94.7773807
+      }
+    ]
+
+    // The location of Cass County
+    const position = { lat: 41.3314529, lng: -95.0931082 };
+    // Request needed libraries.
+    //@ts-ignore
+    const { Map } = await google.maps.importLibrary("maps");
+    const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
+
+    // The map, centered at Uluru
+    map = new Map(document.getElementById("map"), {
+      zoom: 10,
+      center: position,
+      mapId: "UAT_ROI_MAP",
+    });
+
+    allROI.forEach(record => {
+      const pinTextGlyph = new PinElement({
+        glyph: `${record.mapKeyNumber}`,
+        glyphColor: 'white',
+      });
+    
+      const marker = new AdvancedMarkerElement({
+        map,
+        position: {lat: record.latitude, lng: record.longitude},
+        content: pinTextGlyph.element,
+      });
+    });
+  }
+
+  initMap()
+
+</script>
+<style>
+  #map {
+    height: 100vh;
+    width: 100vw;
+  }
+</style>
+</body>
+</html>
